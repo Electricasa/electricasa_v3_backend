@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://localhost:3000', 'https://react-tripplanner.herokuapp.com'],
+  origin: ['http://localhost:3000', 'https://localhost:3000', 'https://electricasa-v3-frontend.herokuapp.com/'],
   credentials: true,
   optionsSuccessStatus:200
 }
