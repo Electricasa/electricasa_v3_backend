@@ -14,27 +14,34 @@ router.get('/', async(req, res) => {
 
 //register//create
 router.post('/', async(req, res) => {
-  //const username = req.body.username
+  console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
   const hashedPassword = await bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const phNumber = req.body.phNumber;
+  const emailNotice = req.body.emailNotice;
+  const mobileNotice = req.body.mobileNotice;
   const UserDbEntry = {};
-        //UserDbEntry.username     = username;
         UserDbEntry.email        = email;
         UserDbEntry.password     = hashedPassword;
+        UserDbEntry.firstName = firstName;
+        UserDbEntry.lastName  = lastName;
+        UserDbEntry.phNumber  = phNumber;
+        UserDbEntry.emailNotice = emailNotice;
+        UserDbEntry.mobileNotice = mobileNotice;
+
   try{
     const user = await User.create(UserDbEntry);
-    console.log("NEW User = ", User)
 
-    req.session.logged = true; //once login is true,
-    //req.session.username = req.body.username;
-    req.session.userId = user._id;//
+    req.session.logged = true;
+    req.session.userId = user._id;
 
     res.json({
       status: 200,
       data: 'register successful',
       userId: user._id,
-      // username: req.body.username
     });
 
   }catch(err){
@@ -95,8 +102,6 @@ router.get('/logout', (req, res) => {
   })
 })
 
-//edit User profile
-
 router.get('/:id', async(req, res) => {
   try{
     const foundUser = await User.findById(req.params.id)
@@ -111,24 +116,22 @@ router.get('/:id', async(req, res) => {
 
 router.put('/:id', async(req, res) => {
   try{
-    console.log('req.body ===> ', req.body)
-    let modifyProfile = {};
-    const password = req.body.password;
-    const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-    modifyProfile.password = hashedPassword;
-    modifyProfile.username = req.body.username;
-    modifyProfile.email = req.body.email;
+      let modifyProfile = {};
+      const password = req.body.password;
+      const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+      modifyProfile.password = hashedPassword;
+      modifyProfile.username = req.body.username;
+      modifyProfile.email = req.body.email;
 
-    console.log("modifiy info ====>", modifyProfile)
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, modifyProfile, {new:true})
-    console.log("findbyidandupdate info ===>", updatedUser)
-    res.json({
-      status: 200,
-      data: 'user is updated',
-      updatedUser: updatedUser
-    })
+      const updatedUser = await User.findByIdAndUpdate(req.params.id, modifyProfile, {new:true})
+
+      res.json({
+        status: 200,
+        data: 'user is updated',
+        updatedUser: updatedUser
+      })
   }catch(err){
-    res.json(err)
+      res.json(err)
   }
 })
 

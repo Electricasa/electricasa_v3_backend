@@ -27,9 +27,11 @@ app.use(cors(corsOptions));
 
 const authControllers = require('./controllers/authControllers');
 const userControllers = require('./controllers/userControllers');
+const houseControllers = require('./controllers/houseControllers');
 
 app.use('/api/v1/auth', authControllers);
 app.use('/api/v1/users', userControllers);
+app.use('/api/v1/house', houseControllers);
 
 
 app.listen(process.env.PORT || 9000, () => {
