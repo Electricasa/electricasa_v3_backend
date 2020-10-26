@@ -10,4 +10,4 @@ const spHeaterSchema = mongoose.Schema({
   userId: {type: String},
 });
 
-module.exports = mongoose.model('spheater', spHeaterSchema)
+module.exports = mongoose.model('spHeater', spHeaterSchema)

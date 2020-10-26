@@ -27,21 +27,22 @@ router.get('/:id', async(req, res) => {
   try{
     console.log(req.params.id);
     const foundUser = await User.findById(req.params.id)
+    console.log(foundUser);
     const foundHouse = await House.findOne({'userId': req.params.id})
-    // const foundAttic = await Attic.findOne({'attic._id': req.params.id})
-    // const foundRoof = await Roof.findOne({'roof._id': req.params.id})
-    // const foundWaHeater = await SpHeater.findOne({'spHeater._id': req.params.id})
-    // const foundSpHeater = await WaHeater.findOne({'waHeater._id': req.params.id})
+    const foundAttic = await Attic.findOne({'userId': req.params.id})
+    const foundRoof = await Roof.findOne({'userId': req.params.id})
+    // const foundWaHeater = await WaHeater.findOne({'waHeater._id': req.params.id})
+    const foundSpHeater = await SpHeater.findOne({'userId': req.params.id})
     // const foundUtility = await Utility.findOne({'utility._id': req.params.id})
 
     res.json({
       status: 200,
       user: foundUser,
       house: foundHouse,
-      // attic: foundAttic,
-      // roof: foundRoof,
+      attic: foundAttic,
+      roof: foundRoof,
       // waHeater: foundWaHeater,
-      // spHeater: foundSpHeater,
+      spHeater: foundSpHeater,
       // utility: foundUtility
     })
   }catch(err){

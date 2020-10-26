@@ -28,10 +28,16 @@ app.use(cors(corsOptions));
 const authControllers = require('./controllers/authControllers');
 const userControllers = require('./controllers/userControllers');
 const houseControllers = require('./controllers/houseControllers');
+const roofControllers = require('./controllers/roofControllers');
+const atticControllers = require('./controllers/atticControllers');
+const spHeatherControllers = require('./controllers/spHeatherControllers');
 
 app.use('/api/v1/auth', authControllers);
 app.use('/api/v1/users', userControllers);
 app.use('/api/v1/house', houseControllers);
+app.use('/api/v1/attic', atticControllers);
+app.use('/api/v1/roof', roofControllers);
+app.use('/api/v1/spHeater', spHeatherControllers);
 
 
 app.listen(process.env.PORT || 9000, () => {
