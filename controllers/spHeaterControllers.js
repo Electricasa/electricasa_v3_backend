@@ -120,7 +120,8 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async(req, res) => {
   try{
-    const deletedSpHeater = await SpHeater.findByIdAndRemove(req.params.id);
+    const foundSpHeater = await SpHeater.findOne({userId: req.params.id});
+    const deletedSpHeater = await SpHeater.findByIdAndRemove(foundSpHeater._id);
     res.json({
       status: 200,
       data: deletedSpHeater
