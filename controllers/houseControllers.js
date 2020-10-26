@@ -123,7 +123,8 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async(req, res) => {
   try{
-    const deletedHouse = await House.findByIdAndRemove(req.params.id);
+    const foundHouse = await House.findOne({userId: req.params.id})
+    const deletedHouse = await House.findByIdAndRemove(foundHouse._id);
     res.json({
       status: 200,
       data: deletedHouse

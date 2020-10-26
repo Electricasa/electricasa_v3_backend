@@ -31,6 +31,8 @@ const houseControllers = require('./controllers/houseControllers');
 const roofControllers = require('./controllers/roofControllers');
 const atticControllers = require('./controllers/atticControllers');
 const spHeatherControllers = require('./controllers/spHeatherControllers');
+const waHeatherControllers = require('./controllers/waHeatherControllers');
+const utilityControllers = require('./controllers/utilityControllers');
 
 app.use('/api/v1/auth', authControllers);
 app.use('/api/v1/users', userControllers);
@@ -38,6 +40,8 @@ app.use('/api/v1/house', houseControllers);
 app.use('/api/v1/attic', atticControllers);
 app.use('/api/v1/roof', roofControllers);
 app.use('/api/v1/spHeater', spHeatherControllers);
+app.use('/api/v1/waHeater', waHeatherControllers);
+app.use('/api/v1/utility', utilityControllers);
 
 
 app.listen(process.env.PORT || 9000, () => {

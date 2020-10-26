@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
 const waheaterSchema = mongoose.Schema({
-  waheaterImg: { type: String },
-  waheatertype: {type: String},
-  waheaterBrand: {type: String},
-  waheaterYear: {type: String},
-  waheaterCondition: {type: String},
-  waheaterSingle : {type: String},
+  waHeaterImg: { type: String },
+  waHeatertype: {type: String},
+  waHeaterBrand: {type: String},
+  waHeaterYear: {type: String},
+  waHeaterCondition: {type: String},
+  waHeaterSingle : {type: String},
   userId: {type: String},
 });
 
-module.exports = mongoose.model('Waheater', waheaterSchema)
+module.exports = mongoose.model('WaHeater', waheaterSchema)
