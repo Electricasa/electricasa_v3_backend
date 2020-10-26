@@ -90,6 +90,7 @@ router.post('/login', async(req, res) => {
 
 //logout
 router.get('/logout', (req, res) => {
+  console.log(req);
   req.session.destroy((err) => {
     if(err){
       res.send(err);

@@ -31,9 +31,9 @@ router.get('/:id', async(req, res) => {
     const foundHouse = await House.findOne({'userId': req.params.id})
     const foundAttic = await Attic.findOne({'userId': req.params.id})
     const foundRoof = await Roof.findOne({'userId': req.params.id})
-    // const foundWaHeater = await WaHeater.findOne({'waHeater._id': req.params.id})
+    const foundWaHeater = await WaHeater.findOne({'userId': req.params.id})
     const foundSpHeater = await SpHeater.findOne({'userId': req.params.id})
-    // const foundUtility = await Utility.findOne({'utility._id': req.params.id})
+    const foundUtility = await Utility.findOne({'userId': req.params.id})
 
     res.json({
       status: 200,
@@ -41,9 +41,9 @@ router.get('/:id', async(req, res) => {
       house: foundHouse,
       attic: foundAttic,
       roof: foundRoof,
-      // waHeater: foundWaHeater,
+      waHeater: foundWaHeater,
       spHeater: foundSpHeater,
-      // utility: foundUtility
+      utility: foundUtility
     })
   }catch(err){
     console.log("Get user request err - ", err)

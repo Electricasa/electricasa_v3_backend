@@ -24,6 +24,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+app.use('/public', express.static('public'));
 
 const authControllers = require('./controllers/authControllers');
 const userControllers = require('./controllers/userControllers');
