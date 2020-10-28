@@ -104,12 +104,13 @@ function makeAtticFromBody(body, filename){
 router.put('/:id', (req, res) => {
   upload(req, res, async(err) =>{
     if(err){
+
       console.log('its err', err);
     }else{
+      console.log('++',req.file);
       const example = makeAtticFromBody(req.body, req.file.filename);
       const foundAttic = await Attic.findOne({userId: req.params.id})
-      const updatedAttic = await Attic.findByIdAndUpdate(foundAttic._id, example, {new: true});
-
+      const updatedAttic = await Attic.findByIdAndUpdate(foundAttic._id, example, {new: true}); 
       res.json({
         status: 200,
         data: updatedAttic
