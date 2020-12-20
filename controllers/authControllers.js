@@ -14,45 +14,52 @@ router.get('/', async(req, res) => {
 
 //register//create
 router.post('/', async(req, res) => {
-  console.log(req.body);
-  const email = req.body.email;
-  const password = req.body.password;
-  const hashedPassword = await bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const phNumber = req.body.phNumber;
-  const emailNotice = req.body.emailNotice;
-  const mobileNotice = req.body.mobileNotice;
-  const UserDbEntry = {};
-        UserDbEntry.email        = email;
-        UserDbEntry.password     = hashedPassword;
-        UserDbEntry.firstName = firstName;
-        UserDbEntry.lastName  = lastName;
-        UserDbEntry.phNumber  = phNumber;
-        UserDbEntry.emailNotice = emailNotice;
-        UserDbEntry.mobileNotice = mobileNotice;
+  const foundUser = await User.findOne({email: req.body.email});
 
-  try{
-    const user = await User.create(UserDbEntry);
+  if(!foundUser){
+    const email = req.body.email;
+    const password = req.body.password;
+    const hashedPassword = await bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const phNumber = req.body.phNumber;
+    const emailNotice = req.body.emailNotice;
+    const mobileNotice = req.body.mobileNotice;
+    const UserDbEntry = {};
+          UserDbEntry.email        = email;
+          UserDbEntry.password     = hashedPassword;
+          UserDbEntry.firstName = firstName;
+          UserDbEntry.lastName  = lastName;
+          UserDbEntry.phNumber  = phNumber;
+          UserDbEntry.emailNotice = emailNotice;
+          UserDbEntry.mobileNotice = mobileNotice;
 
-    req.session.logged = true;
-    req.session.userId = user._id;
+    try{
+      const user = await User.create(UserDbEntry);
 
-    res.json({
-      status: 200,
-      data: 'register successful',
-      userId: user._id,
-    });
+      req.session.logged = true;
+      req.session.userId = user._id;
 
-  }catch(err){
-    res.send(err)
+      res.json({
+        status: 200,
+        data: 'register successful',
+        userId: user._id,
+      });
+
+    }catch(err){
+      res.send(err)
+    }
+
+  }else{
+    res.send('this email is... ')
+
   }
 });
 
 //login
 router.post('/login', async(req, res) => {
   try{
-    const foundUser = await User.findOne({username: req.body.username})
+    const foundUser = await User.findOne({email: req.body.email})
     if(foundUser){
       // console.log("Passwords = ", req.body.password, foundUser.password)
       const passwordMatches = bcrypt.compareSync(req.body.password, foundUser.password);
