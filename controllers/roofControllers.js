@@ -121,7 +121,8 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async(req, res) => {
   try{
-    const deletedRoof = await Roof.findByIdAndRemove(req.params.id);
+    const foundRoof = await Roof.findOne({userId: req.params.id});
+    const deletedRoof = await Roof.findByIdAndRemove(foundRoof._id);
     res.json({
       status: 200,
       data: deletedRoof
