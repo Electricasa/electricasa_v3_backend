@@ -93,7 +93,7 @@ function makeSpHeaterFromBody(body, filename){
   return {
       spHeaterImg: `public/uploads/${filename}`,
       spHeaterType: body.spHeaterType,
-      atticSqft: body.atticSqft,
+      spHeaterBrand: body.spHeaterBrand,
       spHeaterYear: body.spHeaterYear,
       spHeaterCondition: body.spHeaterCondition,
       coolingSystem: body.coolingSystem,

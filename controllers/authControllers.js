@@ -15,6 +15,7 @@ router.get('/', async(req, res) => {
 //register//create
 router.post('/', async(req, res) => {
   const foundUser = await User.findOne({email: req.body.email});
+  console.log('888888888888', foundUser);
 
   if(!foundUser){
     const email = req.body.email;
