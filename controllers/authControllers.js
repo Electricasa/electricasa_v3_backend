@@ -15,7 +15,6 @@ router.get('/', async(req, res) => {
 //register//create
 router.post('/', async(req, res) => {
   const foundUser = await User.findOne({email: req.body.email});
-  console.log('888888888888', foundUser);
 
   if(!foundUser){
     const email = req.body.email;
@@ -29,10 +28,10 @@ router.post('/', async(req, res) => {
     const UserDbEntry = {};
           UserDbEntry.email        = email;
           UserDbEntry.password     = hashedPassword;
-          UserDbEntry.firstName = firstName;
-          UserDbEntry.lastName  = lastName;
-          UserDbEntry.phNumber  = phNumber;
-          UserDbEntry.emailNotice = emailNotice;
+          UserDbEntry.firstName    = firstName;
+          UserDbEntry.lastName     = lastName;
+          UserDbEntry.phNumber     = phNumber;
+          UserDbEntry.emailNotice  = emailNotice;
           UserDbEntry.mobileNotice = mobileNotice;
 
     try{

@@ -13,7 +13,7 @@ const URI = `mongodb+srv://seheesf88:casa-north@cluster0.4c1d1.mongodb.net/elect
 const storage = multer.diskStorage({
   destination: './public/uploads/',
   filename: function (req, file, cb) {
-    console.log('what is file??', file);
+    // console.log('what is file??', file);
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
@@ -66,7 +66,7 @@ router.get('/:id', async(req, res) =>{
 
 
   }catch(err){
-    console.log(err);
+    console.log('attic get request - ', err);
     res.send(err)
   }
 
@@ -110,7 +110,7 @@ router.put('/:id', (req, res) => {
       console.log('++',req.file);
       const example = makeAtticFromBody(req.body, req.file.filename);
       const foundAttic = await Attic.findOne({userId: req.params.id})
-      const updatedAttic = await Attic.findByIdAndUpdate(foundAttic._id, example, {new: true}); 
+      const updatedAttic = await Attic.findByIdAndUpdate(foundAttic._id, example, {new: true});
       res.json({
         status: 200,
         data: updatedAttic

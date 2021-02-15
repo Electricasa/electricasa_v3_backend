@@ -25,9 +25,9 @@ const Utility     = require('../models/utility');
 
 router.get('/:id', async(req, res) => {
   try{
-    console.log(req.params.id);
+    // console.log(req.params.id);
     const foundUser = await User.findById(req.params.id)
-    console.log(foundUser);
+    // console.log(foundUser);
     const foundHouse = await House.findOne({'userId': req.params.id})
     const foundAttic = await Attic.findOne({'userId': req.params.id})
     const foundRoof = await Roof.findOne({'userId': req.params.id})
