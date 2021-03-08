@@ -67,7 +67,6 @@ router.post('/login', async(req, res) => {
       if(bcrypt.compareSync(req.body.password, foundUser.password)){
         // console.log('JUST BEFORE LOGIN RESPONSE')
         req.session.message = '';
-        //req.session.username = foundUser.username;
         req.session.logged = true;
         req.session.userId = foundUser._id
         res.json({

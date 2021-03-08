@@ -121,7 +121,6 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', async(req, res) => {
   try{
-    console.log('hhhhs');
     const foundAttic = await Attic.findOne({userId: req.params.id});
     console.log(foundAttic);
     const deletedAttic = await Attic.findByIdAndRemove(foundAttic._id);
