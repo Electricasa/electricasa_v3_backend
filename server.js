@@ -46,4 +46,4 @@ app.use('/api/v1/utility', utilityControllers);
 
 app.listen(process.env.PORT || 9000, () => {
   console.log('I am working...')
-})
+});

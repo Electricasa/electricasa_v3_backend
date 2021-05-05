@@ -1,6 +1,5 @@
 const express = require('express');
 const router  = express.Router();
-
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
@@ -13,22 +12,17 @@ const User = require('../models/user');
 const storage = multer.diskStorage({
   destination: './public/uploads/',
   filename: function (req, file, cb) {
-    console.log('what is file??', file);
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
-
-
 
 const upload = multer({
   storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
-    console.log('UPLOAD?');
     checkFileType(file, cb)
   }
 }).single('utilityImg');
-
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -36,7 +30,6 @@ function checkFileType(file, cb) {
   const mimetype = filetypes.test(file.mimetype);
 
   if (mimetype && extname) {
-    console.log('checking');
     return cb(null, true);
   } else {
     cb('Error: Images only!');
@@ -45,16 +38,15 @@ function checkFileType(file, cb) {
 
 
 router.get('/', async(req, res) => {
-  try{
+  try {
     const allUtilities = await Utility.find();
     res.json({
       status: 200,
       data: allUtilities
     })
-  }catch(err){
-      res.send(err)
+  } catch(err) {
+    res.send(err);
   }
-
 });
 
 router.get('/:id', async(req, res) =>{
@@ -64,12 +56,10 @@ router.get('/:id', async(req, res) =>{
     res.json({
       status: 200,
       data: foundUtility
-    })
-
+    });
   }catch(err){
     res.send(err)
-  }
-
+  };
 });
 
 router.post('/', (req, res) => {
@@ -106,7 +96,6 @@ function makeUtilityFromBody(body, filename){
 router.put('/:id', (req, res) => {
   upload(req, res, async(err) =>{
     if(err){
-      console.log('its err', err);
     }else{
       const example = makeUtilityFromBody(req.body, req.file.filename);
       const foundUtility = await Utility.findOne({userId: req.params.id});

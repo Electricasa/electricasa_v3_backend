@@ -25,15 +25,13 @@ const Utility     = require('../models/utility');
 
 router.get('/:id', async(req, res) => {
   try{
-    // console.log(req.params.id);
-    const foundUser = await User.findById(req.params.id)
-    // console.log(foundUser);
-    const foundHouse = await House.findOne({'userId': req.params.id})
-    const foundAttic = await Attic.findOne({'userId': req.params.id})
-    const foundRoof = await Roof.findOne({'userId': req.params.id})
-    const foundWaHeater = await WaHeater.findOne({'userId': req.params.id})
-    const foundSpHeater = await SpHeater.findOne({'userId': req.params.id})
-    const foundUtility = await Utility.findOne({'userId': req.params.id})
+    const foundUser = await User.findById(req.params.id);
+    const foundHouse = await House.findOne({'userId': req.params.id});
+    const foundAttic = await Attic.findOne({'userId': req.params.id});
+    const foundRoof = await Roof.findOne({'userId': req.params.id});
+    const foundWaHeater = await WaHeater.findOne({'userId': req.params.id});
+    const foundSpHeater = await SpHeater.findOne({'userId': req.params.id});
+    const foundUtility = await Utility.findOne({'userId': req.params.id});
 
     res.json({
       status: 200,
@@ -44,13 +42,12 @@ router.get('/:id', async(req, res) => {
       waHeater: foundWaHeater,
       spHeater: foundSpHeater,
       utility: foundUtility
-    })
+    });
   }catch(err){
-    console.log("Get user request err - ", err)
+    console.log("Get user request err - ", err);
     res.send(err)
-  }
-})
-
+  };
+});
 
 //delete my acc
 router.delete('/:id', async(req, res) => {
@@ -61,10 +58,8 @@ router.delete('/:id', async(req, res) => {
       data: deletedUser
     })
   }catch(err){
-    res.send(err)
+    res.send(err);
   }
 })
-
-
 
 module.exports = router

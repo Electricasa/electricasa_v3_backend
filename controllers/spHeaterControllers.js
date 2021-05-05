@@ -1,14 +1,12 @@
 const express = require('express');
 const router  = express.Router();
-
 const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 
 const SpHeater  = require('../models/spHeater');
 const User = require('../models/user');
-
-const URI = `mongodb+srv://seheesf88:casa-north@cluster0.4c1d1.mongodb.net/electricasa-v3?retryWrites=true&w=majority`
+const URI = `mongodb+srv://seheesf88:casa-north@cluster0.4c1d1.mongodb.net/electricasa-v3?retryWrites=true&w=majority`;
 
 const storage = multer.diskStorage({
   destination: './public/uploads/',
@@ -17,17 +15,13 @@ const storage = multer.diskStorage({
   }
 });
 
-
-
 const upload = multer({
   storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
-    console.log('UPLOAD?');
     checkFileType(file, cb)
   }
 }).single('spHeaterImg');
-
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -35,13 +29,11 @@ function checkFileType(file, cb) {
   const mimetype = filetypes.test(file.mimetype);
 
   if (mimetype && extname) {
-    console.log('checking');
     return cb(null, true);
   } else {
     cb('Error: Images only!');
   }
 }
-
 
 router.get('/', async(req, res) => {
   try{
@@ -51,9 +43,8 @@ router.get('/', async(req, res) => {
       data: allSpHeater
     })
   }catch(err){
-      res.send(err)
+    res.send(err);
   }
-
 });
 
 router.get('/:id', async(req, res) =>{
@@ -62,32 +53,28 @@ router.get('/:id', async(req, res) =>{
     const foundSpHeater = await SpHeater.findOne({userId: req.params.id});
     res.json({
       status: 200,
-      data: foundSpHeater,
-    })
-
-
+      data: foundSpHeater
+    });
   }catch(err){
-    res.send(err)
+    res.send(err);
   }
-
 });
 
 router.post('/', (req, res) => {
   upload(req, res,  async (err) => {
     if (err){
-        res.json(err);
+      res.json(err);
     }else{
-        const createdPost = await SpHeater.create(makeSpHeaterFromBody(req.body, req.file.filename))
-        createdPost.save((err, savedPost) => {
-          res.json({
-            msg: 'file uploaded',
-            newPost: savedPost,
-          });
+      const createdPost = await SpHeater.create(makeSpHeaterFromBody(req.body, req.file.filename));
+      createdPost.save((err, savedPost) => {
+        res.json({
+          msg: 'file uploaded',
+          newPost: savedPost
         });
-    }
+      });
+    };
   });
 });
-
 
 function makeSpHeaterFromBody(body, filename){
   return {
@@ -98,8 +85,8 @@ function makeSpHeaterFromBody(body, filename){
       spHeaterCondition: body.spHeaterCondition,
       coolingSystem: body.coolingSystem,
       userId: body.userId
-  }
-}
+  };
+};
 
 router.put('/:id', (req, res) => {
   upload(req, res, async(err) =>{
@@ -113,9 +100,9 @@ router.put('/:id', (req, res) => {
       res.json({
         status: 200,
         data: updatedSpHeater
-          })
-    }
-  })
+      });
+    };
+  });
 });
 
 router.delete('/:id', async(req, res) => {
@@ -126,11 +113,9 @@ router.delete('/:id', async(req, res) => {
       status: 200,
       data: deletedSpHeater
     })
-
   }catch(err){
     res.send(err)
-  }
+  };
 });
-
 
 module.exports = router

@@ -3,14 +3,12 @@ const router  = express.Router();
 const bcrypt = require('bcrypt');
 const User    = require('../models/user');
 
-
 router.get('/', async(req, res) => {
   const AllUsers = await User.find({});
   res.json({
     user: AllUsers,
   })
 })
-
 
 //register//create
 router.post('/', async(req, res) => {
@@ -34,7 +32,7 @@ router.post('/', async(req, res) => {
           UserDbEntry.emailNotice  = emailNotice;
           UserDbEntry.mobileNotice = mobileNotice;
 
-    try{
+    try {
       const user = await User.create(UserDbEntry);
 
       req.session.logged = true;
@@ -46,86 +44,84 @@ router.post('/', async(req, res) => {
         userId: user._id,
       });
 
-    }catch(err){
-      res.send(err)
-    }
-
-  }else{
+    } catch(err) {
+      res.send(err);
+    };
+  } else {
     res.send('this email is... ')
-
-  }
+  };
 });
 
 //login
 router.post('/login', async(req, res) => {
-  try{
-    const foundUser = await User.findOne({email: req.body.email})
-    if(foundUser){
-      // console.log("Passwords = ", req.body.password, foundUser.password)
+  try {
+    const foundUser = await User.findOne({email: req.body.email});
+    if (foundUser) {
       const passwordMatches = bcrypt.compareSync(req.body.password, foundUser.password);
-      // console.log("PASSWORD MATCH = ", passwordMatches)
-      if(bcrypt.compareSync(req.body.password, foundUser.password)){
-        // console.log('JUST BEFORE LOGIN RESPONSE')
+      if (bcrypt.compareSync(req.body.password, foundUser.password)) {
         req.session.message = '';
         req.session.logged = true;
-        req.session.userId = foundUser._id
+        req.session.userId = foundUser._id;
+
         res.json({
           status: 200,
           data: 'login successful',
           userId: foundUser._id
         });
-      }else{
-        req.session.message = 'email or password is not correct'
+      } else {
+        req.session.message = 'email or password is not correct';
+
         res.status(401).json({
           status: 401,
           data: 'login unsuccessful'
         });
-      }
-    }else{
+      };
+    } else {
       req.session.message = 'email or password is incorrect';
+
       res.json({
         status: 401,
         data: 'login unsuccessful',
       });
-    }
-  }catch(err){
+    };
+  } catch(err) {
     res.send(err)
-  }
-})
-
+  };
+});
 
 //logout
 router.get('/logout', (req, res) => {
-  console.log(req);
   req.session.destroy((err) => {
-    if(err){
+    if (err) {
       res.send(err);
-    }else{
+    } else {
       res.json({
         status: 200,
         data: 'logout successful'
       });
-    }
-  })
-})
+    };
+  });
+});
 
 router.get('/:id', async(req, res) => {
-  try{
-    const foundUser = await User.findById(req.params.id)
+  try {
+    const foundUser = await User.findById(req.params.id);
+
     res.json({
       status: 200,
       data: foundUser
-    })
-  }catch(err){
-    res.send(err)
-  }
-})
+    });
+  } catch(err) {
+    res.send(err);
+  };
+});
 
 router.put('/:id', async(req, res) => {
-  try{
+  try {
       let modifyProfile = {};
       const password = req.body.password;
-      const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+      const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+
       modifyProfile.email = req.body.email;
       modifyProfile.password = hashedPassword;
       modifyProfile.firstName = req.body.firstName;
@@ -140,12 +136,10 @@ router.put('/:id', async(req, res) => {
         status: 200,
         data: 'user is updated',
         updatedUser: updatedUser
-      })
-  }catch(err){
-      res.json(err)
-  }
-})
-
-
+      });
+  } catch(err) {
+    res.json(err)
+  };
+});
 
 module.exports = router
