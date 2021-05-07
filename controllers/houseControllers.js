@@ -5,23 +5,32 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 
+//creates a uniform id for S3 storage
+const { v4: uuidv4 } = require('uuid');
+
+const S3 = require('aws-sdk/clients/s3');
+const s3 = new S3(); // initialize the construcotr
+
 const House  = require('../models/house');
 const User = require('../models/user');
 
-const storage = multer.diskStorage({
-  destination: './public/uploads/',
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
+// houseImg  is the key for the image file
 
+// const storage = multer.diskStorage({
+//   destination: './public/uploads/',
+//   filename: function (req, file, cb) {
+//     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//   }
+// });
+
+// removing .single('houseImg') to add in the middleware for readability
 const upload = multer({
   storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   }
-}).single('houseImg');
+});
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -60,20 +69,40 @@ router.get('/:id', async(req, res) =>{
   };
 });
 
-router.post('/', (req, res) => {
-  upload(req, res,  async (err) => {
-    if (err) {
-      res.json(err);
-    } else {
-      const createdPost = await House.create(makeHouseFromBody(req.body, req.file.filename));
-      createdPost.save((err, savedPost) => {
-        res.json({
-          msg: 'file uploaded',
-          newPost: savedPost,
-        });
-      });
-    };
-  });
+// upload.single should create req.file that has the 
+// originalname and buffer attributes
+
+router.post('/', upload.single('houseImg'), (req, res) => {
+  // upload(req, res,  async (err) => {
+  //   if (err) {
+  //     res.json(err);
+  //   } else {
+  //     const createdPost = await House.create(makeHouseFromBody(req.body, req.file.filename));
+  //     createdPost.save((err, savedPost) => {
+  //       res.json({
+  //         msg: 'file uploaded',
+  //         newPost: savedPost,
+  //       });
+  //     });
+  //   };
+  // });
+
+  const filePath = `${uuidv4()}/${req.file.originalname}`
+  const params = {Bucket: 'myelectricasa', Key: filePath, Body: req.file.buffer};
+ 
+  s3.upload(params, async function(err, data){
+    // data.Location is our photoUrl that exists on aws
+    const house = await House.create({...req.body, houseImg: data.Location});
+    try {
+      await user.save();
+      const token = createJWT(user); 
+      res.json({ token });
+    } catch (err) {
+      // Probably a duplicate email
+      res.status(400).json(err);
+    }
+  })
+
 });
 
 function makeHouseFromBody(body, filename) {
