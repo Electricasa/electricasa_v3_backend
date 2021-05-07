@@ -5,8 +5,16 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 
+//creates a uniform id for S3 storage
+const { v4: uuidv4 } = require('uuid');
+
+const S3 = require('aws-sdk/clients/s3');
+const s3 = new S3(); // initialize the construcotr
+
 const House  = require('../models/house');
 const User = require('../models/user');
+
+// houseImg  is the key for the image file
 
 const storage = multer.diskStorage({
   destination: './public/uploads/',
@@ -15,13 +23,17 @@ const storage = multer.diskStorage({
   }
 });
 
+
+// removing .single('houseImg') to add in the middleware for readability
 const upload = multer({
-  storage: storage,
+  // storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   }
-}).single('houseImg');
+});
+
+// const upload = multer();
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -60,20 +72,38 @@ router.get('/:id', async(req, res) =>{
   };
 });
 
-router.post('/', (req, res) => {
-  upload(req, res,  async (err) => {
-    if (err) {
-      res.json(err);
-    } else {
-      const createdPost = await House.create(makeHouseFromBody(req.body, req.file.filename));
-      createdPost.save((err, savedPost) => {
-        res.json({
-          msg: 'file uploaded',
-          newPost: savedPost,
-        });
-      });
-    };
-  });
+// upload.single should create req.file that has the 
+// originalname and buffer attributes
+
+router.post('/', upload.single('houseImg'), (req, res) => {
+  // upload(req, res,  async (err) => {
+  //   if (err) {
+  //     res.json(err);
+  //   } else {
+  //     const createdPost = await House.create(makeHouseFromBody(req.body, req.file.filename));
+  //     createdPost.save((err, savedPost) => {
+  //       res.json({
+  //         msg: 'file uploaded',
+  //         newPost: savedPost,
+  //       });
+  //     });
+  //   };
+  // });
+  console.log(req.file, "req.file<------")
+  const filePath = `${uuidv4()}/${req.file.originalname}`
+  const params = {Bucket: 'myelectricasa', Key: filePath, Body: req.file.buffer};
+ 
+  s3.upload(params, async function(err, data){
+    // data.Location is our photoUrl that exists on aws
+    
+    try {
+      const house = await House.create({...req.body, houseImg: data.Location});
+    } catch (err) {
+      // House not created successfully.
+      res.status(500).json(err);
+    }
+  })
+
 });
 
 function makeHouseFromBody(body, filename) {
