@@ -16,21 +16,24 @@ const User = require('../models/user');
 
 // houseImg  is the key for the image file
 
-// const storage = multer.diskStorage({
-//   destination: './public/uploads/',
-//   filename: function (req, file, cb) {
-//     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//   }
-// });
+const storage = multer.diskStorage({
+  destination: './public/uploads/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
 
 // removing .single('houseImg') to add in the middleware for readability
 const upload = multer({
-  storage: storage,
+  // storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   }
 });
+
+// const upload = multer();
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -86,20 +89,18 @@ router.post('/', upload.single('houseImg'), (req, res) => {
   //     });
   //   };
   // });
-
+  console.log(req.file, "req.file<------")
   const filePath = `${uuidv4()}/${req.file.originalname}`
   const params = {Bucket: 'myelectricasa', Key: filePath, Body: req.file.buffer};
  
   s3.upload(params, async function(err, data){
     // data.Location is our photoUrl that exists on aws
-    const house = await House.create({...req.body, houseImg: data.Location});
+    
     try {
-      await user.save();
-      const token = createJWT(user); 
-      res.json({ token });
+      const house = await House.create({...req.body, houseImg: data.Location});
     } catch (err) {
-      // Probably a duplicate email
-      res.status(400).json(err);
+      // House not created successfully.
+      res.status(500).json(err);
     }
   })
 
