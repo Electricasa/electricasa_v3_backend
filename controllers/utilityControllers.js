@@ -7,6 +7,8 @@ const path = require('path');
 const Utility  = require('../models/utility');
 const User = require('../models/user');
 
+const photoUtil = require('../utils/photoUploadService');
+
 // const URI = `mongodb+srv://seheesf88:casa-north@cluster0.4c1d1.mongodb.net/electricasa-v3?retryWrites=true&w=majority`
 
 const storage = multer.diskStorage({
@@ -17,12 +19,12 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: storage,
+  // storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb)
   }
-}).single('utilityImg');
+});
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -62,21 +64,25 @@ router.get('/:id', async(req, res) =>{
   };
 });
 
-router.post('/', (req, res) => {
-  upload(req, res,  async (err) => {
-    if (err){
-        res.json(err);
-    }else{
-        const createdPost = await Utility.create(makeUtilityFromBody(req.body, req.file.filename))
-        createdPost.save((err, savedPost) => {
-          res.json({
-            msg: 'file uploaded',
-            newPost: savedPost,
-          });
-        });
-    }
-  });
+router.post('/', upload.single('utilityImg'), (req, res) => {
+  photoUtil.uploadPhotoSaveFormInfo(req, res, Utility, 'utilityImg')
 });
+
+// router.post('/', (req, res) => {
+//   upload(req, res,  async (err) => {
+//     if (err){
+//         res.json(err);
+//     }else{
+//         const createdPost = await Utility.create(makeUtilityFromBody(req.body, req.file.filename))
+//         createdPost.save((err, savedPost) => {
+//           res.json({
+//             msg: 'file uploaded',
+//             newPost: savedPost,
+//           });
+//         });
+//     }
+//   });
+// });
 
 
 function makeUtilityFromBody(body, filename){
