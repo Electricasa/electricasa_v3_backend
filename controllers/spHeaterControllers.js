@@ -8,6 +8,8 @@ const SpHeater  = require('../models/spHeater');
 const User = require('../models/user');
 const URI = `mongodb+srv://seheesf88:casa-north@cluster0.4c1d1.mongodb.net/electricasa-v3?retryWrites=true&w=majority`;
 
+const photoUtil = require('../utils/photoUploadService')
+
 const storage = multer.diskStorage({
   destination: './public/uploads/',
   filename: function (req, file, cb) {
@@ -16,12 +18,12 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: storage,
+  // storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb)
   }
-}).single('spHeaterImg');
+});
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -60,21 +62,25 @@ router.get('/:id', async(req, res) =>{
   }
 });
 
-router.post('/', (req, res) => {
-  upload(req, res,  async (err) => {
-    if (err){
-      res.json(err);
-    }else{
-      const createdPost = await SpHeater.create(makeSpHeaterFromBody(req.body, req.file.filename));
-      createdPost.save((err, savedPost) => {
-        res.json({
-          msg: 'file uploaded',
-          newPost: savedPost
-        });
-      });
-    };
-  });
+router.post('/', upload.single('spHeaterImg'), (req, res) => {
+  photoUtil.uploadPhotoSaveFormInfo(req, res, SpHeater, 'spHeaterImg')
 });
+
+// router.post('/', (req, res) => {
+//   upload(req, res,  async (err) => {
+//     if (err){
+//       res.json(err);
+//     }else{
+//       const createdPost = await SpHeater.create(makeSpHeaterFromBody(req.body, req.file.filename));
+//       createdPost.save((err, savedPost) => {
+//         res.json({
+//           msg: 'file uploaded',
+//           newPost: savedPost
+//         });
+//       });
+//     };
+//   });
+// });
 
 function makeSpHeaterFromBody(body, filename){
   return {
