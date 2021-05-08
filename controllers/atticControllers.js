@@ -8,6 +8,8 @@ const path = require('path');
 const Attic  = require('../models/attic');
 const User = require('../models/user');
 
+const photoUtil = require('../utils/photoUploadService')
+
 const storage = multer.diskStorage({
   destination: './public/uploads/',
   filename: function (req, file, cb) {
@@ -16,12 +18,12 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: storage,
+  // storage: storage,
   limits: {fileSize: 100000000},
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb)
   }
-}).single('atticImg');
+});
 
 function checkFileType(file, cb) {
   const filetypes = /jpeg|jpg|png|gif/;
@@ -63,21 +65,25 @@ router.get('/:id', async(req, res) =>{
   };
 });
 
-router.post('/', (req, res) => {
-  upload(req, res,  async (err) => {
-    if (err){
-      res.json(err);
-    }else{
-      const createdPost = await Attic.create(makeAtticFromBody(req.body, req.file.filename));
-      createdPost.save((err, savedPost) => {
-        res.json({
-          msg: 'file uploaded',
-          newPost: savedPost,
-        });
-      });
-    };
-  });
+router.post('/', upload.single('atticImg'), (req, res) => {
+  photoUtil.uploadPhotoSaveFormInfo(req, res, Attic, 'atticImg')
 });
+
+// router.post('/', (req, res) => {
+//   upload(req, res,  async (err) => {
+//     if (err){
+//       res.json(err);
+//     }else{
+//       const createdPost = await Attic.create(makeAtticFromBody(req.body, req.file.filename));
+//       createdPost.save((err, savedPost) => {
+//         res.json({
+//           msg: 'file uploaded',
+//           newPost: savedPost,
+//         });
+//       });
+//     };
+//   });
+// });
 
 function makeAtticFromBody(body, filename){
   return {
