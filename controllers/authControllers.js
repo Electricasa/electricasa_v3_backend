@@ -27,6 +27,27 @@ async function signup(req, res) {
 
 }
 
+//login
+
+async function login(req, res) {
+  
+  try {
+    const user = await User.findOne({email: req.body.email});
+    console.log(user, ' this user', !user, !!user)
+    if (!user) return res.status(401).json({err: 'bad credentials'});
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (isMatch) {
+        const token = createJWT(user);
+        res.json({token});
+      } else {
+        return res.status(401).json({err: 'bad credentials'});
+      }
+    });
+  } catch (err) {
+    return res.status(401).json(err);
+  }
+}
+
 //--------------------------helper functions-----------------------//
 function createJWT(user) {
   return jwt.sign(
@@ -35,6 +56,8 @@ function createJWT(user) {
     {expiresIn: '24h'}
   );
 }
+
+//register//create
 
 router.post('/', async(req, res) => {
   const foundUser = await User.findOne({email: req.body.email});
