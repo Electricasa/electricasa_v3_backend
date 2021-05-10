@@ -26,6 +26,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/public', express.static('public'));
 
+// JWT authentication
+// app.use(require('./config/auth'));
+
 const authControllers = require('./controllers/authControllers');
 const userControllers = require('./controllers/userControllers');
 const houseControllers = require('./controllers/houseControllers');
