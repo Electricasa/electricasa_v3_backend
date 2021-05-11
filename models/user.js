@@ -1,5 +1,3 @@
-module.exports = mongoose.model('User', userSchema)
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
