@@ -38,7 +38,7 @@ const spHeaterControllers = require('./controllers/spHeaterControllers');
 const waHeaterControllers = require('./controllers/waHeaterControllers');
 const utilityControllers = require('./controllers/utilityControllers');
 
-app.use('/api/v1/auth', authControllers);
+app.use('/api/v1/auth', require('./routes/api/authRoutes'));
 app.use('/api/v1/users', userControllers);
 app.use('/api/v1/house', houseControllers);
 app.use('/api/v1/attic', atticControllers);

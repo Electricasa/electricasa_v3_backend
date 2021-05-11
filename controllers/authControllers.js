@@ -6,6 +6,13 @@ const User    = require('../models/user');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 
+module.exports = {
+  getAllUsers,
+  signup,
+  login,
+  findUser,
+  editUser
+}
 
 async function getAllUsers(req, res){
   const AllUsers = await User.find({});
