@@ -85,12 +85,16 @@ async function editUser(req, res){
   try {
 
     const updatedUser = await User.findByIdAndUpdate(req.params.id, {...req.body}, {new:true});
-
-    res.json({
-      status: 200,
-      data: 'user is updated',
-      updatedUser: updatedUser
-    });
+    await updatedUser.save();
+    console.log(updatedUser, "user updated");
+    // res.json({
+    //   status: 200,
+    //   data: 'user is updated',
+    //   updatedUser: updatedUser
+    // });
+    const token = createJWT(updatedUser);
+    console.log({token}, "token <---------------")
+    res.json({ token });
 } catch(err) {
   res.json(err)
 };
