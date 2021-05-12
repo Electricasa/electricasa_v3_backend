@@ -24,10 +24,15 @@ async function getAllUsers(req, res){
 //register//create
 
 async function signup(req, res) {
+  console.log("signup firing <--------")
+  console.log(req.body, "<---- req.body")
   const user = new User({...req.body});
+  
   try{
     await user.save();
+    console.log(user, "user created")
     const token = createJWT(user);
+    console.log(token, "token <---------------")
     res.json({ token });
   } catch (err) {
     // duplicate email, most likely
@@ -92,6 +97,8 @@ async function editUser(req, res){
 
 //--------------------------helper functions-----------------------//
 function createJWT(user) {
+  console.log("createJWT firing")
+  console.log(SECRET, "createJWT <-------")
   return jwt.sign(
     {user}, // data payload
     SECRET,
