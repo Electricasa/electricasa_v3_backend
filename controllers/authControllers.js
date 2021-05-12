@@ -32,9 +32,10 @@ async function signup(req, res) {
     await user.save();
     console.log(user, "user created")
     const token = createJWT(user);
-    console.log(token, "token <---------------")
+    console.log({token}, "token <---------------")
     res.json({ token });
   } catch (err) {
+    console.log("something went wrong")
     // duplicate email, most likely
     res.status(400).json(err);
   }
