@@ -82,19 +82,35 @@ async function findUser(req, res) {
 }
 
 async function editUser(req, res){
+  let user;
+  console.log("edit firing");
   try {
-
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, {...req.body}, {new:true});
-    await updatedUser.save();
-    console.log(updatedUser, "user updated");
-    // res.json({
-    //   status: 200,
-    //   data: 'user is updated',
-    //   updatedUser: updatedUser
+    console.log(req.body, "req.body from edit <------")
+    // const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new:true});
+    // const updatedUser = await User.findByIdAndUpdate(req.params.id, {...req.body}, {new:true});
+    // updatedUser.updateOne({password: req.body.password})
+    User.findById(req.params.id, function (err, doc){
+      user = doc;
+      if(user){
+        for (const key in req.body) {
+          user[key] = req.body[key];
+      }
+      console.log(user, "user from edit");
+      // user = {...req.body, _id: req.params.id}
+      user.save();
+      console.log(user, "user updated");
+      
+    }
+    });
+    const token = createJWT(user);
+    console.log({token}, "token <------edit---------")
+    res.status(200).json({ token });
+      //   ,{
+      // status: 200,
+      // data: 'user is updated',
+      // updatedUser: updatedUser
     // });
-    const token = createJWT(updatedUser);
-    console.log({token}, "token <---------------")
-    res.json({ token });
+    // res.json({ token });
 } catch(err) {
   res.json(err)
 };
