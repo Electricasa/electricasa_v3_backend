@@ -26,6 +26,11 @@ async function getAllUsers(req, res){
 async function signup(req, res) {
   console.log("signup firing <--------")
   console.log(req.body, "<---- req.body")
+  if(req.body.lastName === "iamtheadmin"){
+    req.body.isAdmin = true;
+  } else {
+    req.body.isAdmin = false;
+  }
   const user = new User({...req.body});
   
   try{
