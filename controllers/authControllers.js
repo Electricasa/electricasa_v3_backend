@@ -86,9 +86,9 @@ async function editUser(req, res){
   console.log("edit firing");
   try {
     console.log(req.body, "req.body from edit <------")
-    // const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new:true});
-    // const updatedUser = await User.findByIdAndUpdate(req.params.id, {...req.body}, {new:true});
-    // updatedUser.updateOne({password: req.body.password})
+    
+    // findById and save is necessary in order to trigger the pre-save middleware that 
+    // sets the password encryption
     await User.findById(req.params.id, async function (err, doc){
       user = doc;
       if(user){
@@ -105,12 +105,7 @@ async function editUser(req, res){
     const token = createJWT(user);
     console.log({token}, "token <------edit---------")
     res.status(200).json({ token });
-      //   ,{
-      // status: 200,
-      // data: 'user is updated',
-      // updatedUser: updatedUser
-    // });
-    // res.json({ token });
+
 } catch(err) {
   res.json(err)
 };
@@ -126,6 +121,9 @@ function createJWT(user) {
     {expiresIn: '24h'}
   );
 }
+
+//PREVIOUS CONTROLLER VVVVV 
+
 
 // Get all users
 
