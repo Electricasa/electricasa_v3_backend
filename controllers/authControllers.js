@@ -89,7 +89,7 @@ async function editUser(req, res){
     // const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {new:true});
     // const updatedUser = await User.findByIdAndUpdate(req.params.id, {...req.body}, {new:true});
     // updatedUser.updateOne({password: req.body.password})
-    User.findById(req.params.id, function (err, doc){
+    await User.findById(req.params.id, async function (err, doc){
       user = doc;
       if(user){
         for (const key in req.body) {
@@ -97,7 +97,7 @@ async function editUser(req, res){
       }
       console.log(user, "user from edit");
       // user = {...req.body, _id: req.params.id}
-      user.save();
+      await user.save();
       console.log(user, "user updated");
       
     }
