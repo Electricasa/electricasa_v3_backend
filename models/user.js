@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   password: {type: String},
   emailNotice: {type: String},
   mobileNotice : {type: String},
+  isAdmin : {type: Boolean}
   // userId: {type: String}
 }, {
   timestamps: true
