@@ -7,6 +7,17 @@ const { v4: uuidv4 } = require('uuid');
 const S3 = require('aws-sdk/clients/s3');
 const s3 = new S3(); // initialize the construcotr
 
+
+
+//Function for checking if there's a record in addresses for this model
+  // Mongoose findOne - find if there's an address with this model's record id
+    // as addressRecord.thismodel._id
+  // if record exists, return the record
+  //else, create a new address and return that
+
+// Function for updating the address
+  //save the particular model
+
 function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
 
     console.log(req.file, "req.file<------")
