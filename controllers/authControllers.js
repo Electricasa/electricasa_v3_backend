@@ -3,6 +3,10 @@ const router  = express.Router();
 const bcrypt = require('bcrypt');
 const User    = require('../models/user');
 
+//Address
+const Address = require('../models/address');
+
+//JWT
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 
@@ -32,9 +36,15 @@ async function signup(req, res) {
     req.body.isAdmin = false;
   }
   const user = new User({...req.body});
+
+  // Address Model
+  // links the user to the address model so we can call
+  // .populate on the requests for Admin side
+  const address = new Address({user: user._id});
   
   try{
     await user.save();
+    await address.save();
     console.log(user, "user created")
     const token = createJWT(user);
     console.log({token}, "token <---------------")
