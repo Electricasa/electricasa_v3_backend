@@ -8,7 +8,10 @@ const addressSchema = mongoose.Schema({
     spHeater: { type: mongoose.Schema.Types.ObjectId, ref: 'SpHeater'},
     utility: { type: mongoose.Schema.Types.ObjectId, ref: 'Utility'},
     waHeater: { type: mongoose.Schema.Types.ObjectId, ref: 'WaHeater'},
-    approved: {type: Boolean}
+    completed: {type: Boolean},
+    approved: {type: Boolean},
+    buildingEfficiencyRating: {type: String},
+    electrificationRating: {type: String}
 }, {
     timestamps: true
   });
