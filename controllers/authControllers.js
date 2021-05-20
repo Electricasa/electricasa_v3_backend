@@ -40,12 +40,13 @@ async function signup(req, res) {
   // Address Model
   // links the user to the address model so we can call
   // .populate on the requests for Admin side
-  const address = new Address({user: user._id});
+  const address = new Address({userId: user._id});
   
   try{
     await user.save();
     await address.save();
     console.log(user, "user created")
+    console.log(address, "address created")
     const token = createJWT(user);
     console.log({token}, "token <---------------")
     res.json({ token });
@@ -104,8 +105,8 @@ async function editUser(req, res){
     
     // findById and save is necessary in order to trigger the pre-save middleware that 
     // sets the password encryption
-    await User.findById(req.params.id, async function (err, doc){
-      user = doc;
+    await User.findById(req.params.id, async function (err, user){
+      // user = doc;
       if(user){
         for (const key in req.body) {
           user[key] = req.body[key];
