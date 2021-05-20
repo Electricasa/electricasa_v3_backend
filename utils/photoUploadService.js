@@ -10,10 +10,7 @@ const s3 = new S3(); // initialize the construcotr
 
 // get the appropriate field in the address model to 
 // correspond with the right model from the controller funciton
-function getModelField(ModelObject){
-  ModelObject[0] = ModelObject[0].toLowerCase();
-  return ModelObject;
-}
+
 
 
 
@@ -29,10 +26,14 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
     const params = {Bucket: 'myelectricasa', Key: filePath, Body: req.file.buffer};
    
     s3.upload(params, async function(err, data){
+
+      console.log(req.body, "<--------req.body from s3")
       // data.Location is our photoUrl that exists on aws
       const newModelDocument = await ModelObject.create({...req.body});
       const addressDocument = await Address.findOne({userId: req.body.userId});
-      const modelField = getModelField(ModelObject);
+      console.log(addressDocument, "address Doc from S3")
+      const modelField = photoName.slice(0, (photoName.length - 3));
+      console.log(modelField, "Model Field <--------")
       addressDocument[modelField] = newModelDocument._id;
       console.log(newModelDocument, "database record being saved to db in S3 function")
       console.log(addressDocument, "Address doc from S3 function <--------")
