@@ -8,6 +8,19 @@ const { v4: uuidv4 } = require('uuid');
 const S3 = require('aws-sdk/clients/s3');
 const s3 = new S3(); // initialize the construcotr
 
+// current fields necessary for an address entry to be considered complete
+const addressFields = ["attic", "house", "roof", "spHeater", "utility", "waHeater"]
+
+// checks if address document has necessary fields entered to be "complete"
+function checkComplete(addressDoc){
+  for (let item in addressFields){
+    if(!addressDoc[item]){
+      return false;
+    }
+  }
+  return true;
+}
+
 
 
 function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
@@ -26,9 +39,9 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
       const modelField = photoName.slice(0, (photoName.length - 3));
       addressDocument[modelField] = newModelDocument._id;
 
-      // check if address document is complete or not
-
-      // complete, update address doc's complete field to true
+      // check if address document is complete or not, update address doc's complete field
+      
+      addressDocument.completed = checkComplete(addressDocument);
 
       // test updated documents
       console.log(newModelDocument, "database record being saved to db in S3 function")
