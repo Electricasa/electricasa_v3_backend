@@ -40,7 +40,7 @@ async function signup(req, res) {
   // Address Model
   // links the user to the address model so we can call
   // .populate on the requests for Admin side
-  const address = new Address({userId: user._id});
+  const address = new Address({user: user._id});
   
   try{
     await user.save();
