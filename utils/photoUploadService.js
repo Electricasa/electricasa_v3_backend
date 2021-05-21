@@ -37,15 +37,16 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
 
       // get our mycasa document and the document for the address as a whole
       const newModelDocument = await ModelObject.create({...req.body});
-      const addressDocument = await Address.findOne({userId: req.body.userId});
+      const addressDocument = await Address.findOne({user: req.body.userId});
 
       // model field is the same as the Image field minus "Img"
       const modelField = photoName.slice(0, (photoName.length - 3));
       addressDocument[modelField] = newModelDocument._id;
 
       // check if address document is complete or not, update address doc's complete field
-      
       addressDocument.completed = checkComplete(addressDocument);
+
+      addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
 
       // test updated documents
       console.log(newModelDocument, "database record being saved to db in S3 function")

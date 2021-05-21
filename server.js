@@ -40,6 +40,7 @@ const waHeaterControllers = require('./controllers/waHeaterControllers');
 const utilityControllers = require('./controllers/utilityControllers');
 
 app.use('/api/v1/auth', require('./routes/api/authRoutes'));
+app.use('/api/v1/address', require('./routes/api/addressRoutes'));
 app.use('/api/v1/users', userControllers);
 app.use('/api/v1/house', houseControllers);
 app.use('/api/v1/attic', atticControllers);

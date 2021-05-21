@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const addressSchema = mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     attic: { type: mongoose.Schema.Types.ObjectId, ref: 'Attic'},
     house: { type: mongoose.Schema.Types.ObjectId, ref: 'House'},
     roof: { type: mongoose.Schema.Types.ObjectId, ref: 'Roof'},
@@ -9,7 +9,7 @@ const addressSchema = mongoose.Schema({
     utility: { type: mongoose.Schema.Types.ObjectId, ref: 'Utility'},
     waHeater: { type: mongoose.Schema.Types.ObjectId, ref: 'WaHeater'},
     completed: {type: Boolean},
-    approved: {type: Boolean},
+    verified: {type: Boolean},
     buildingEfficiencyRating: {type: String},
     electrificationRating: {type: String},
 }, {
