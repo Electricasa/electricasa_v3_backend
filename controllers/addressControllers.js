@@ -23,11 +23,12 @@ async function getAllAddresses(req, res){
 async function getOneAddress(req, res){
     
     try{
-        console.log("backend get one address firing")
-        const post = await Address.findOne({_id: req.params.id}).populate('user').populate('attic').populate('house')
-        .populate('roof').populate('spHeater').populate('utility')
-        .populate('waHeater').exec();
-        res.status(200).json({address})
+        console.log(req.params.id, "<----- backend get one address firing")
+        const address = await Address.findOne({_id: req.params.id}).populate('user').populate('attic').populate('house')
+            .populate('roof').populate('spHeater').populate('utility')
+            .populate('waHeater').exec();
+        console.log(address.house, "address from getOne BE <------")
+        res.status(200).json({address});
     } catch(err){
         return res.status(401).json(err)
     }
