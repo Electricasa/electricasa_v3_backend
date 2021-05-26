@@ -12,5 +12,6 @@ const addressCtrl = require('../../controllers/addressControllers');
 /*---------- Protected Routes ----------*/
 
 router.get('/', addressCtrl.getAllAddresses);
+router.get('/:id', addressCtrl.getOneAddress);
 
 module.exports = router
