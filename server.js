@@ -27,6 +27,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/public', express.static('public'));
 
+//Method Override
+app.use(methodOverride('_method'));
+
 // JWT authentication
 app.use(require('./config/auth'));
 
