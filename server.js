@@ -4,6 +4,7 @@ const app        = express();
 const bodyParser = require('body-parser');
 const cors       = require('cors');
 const session    = require('express-session');
+var methodOverride = require('method-override');
 
 require('./db/db');
 

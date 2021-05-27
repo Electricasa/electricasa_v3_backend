@@ -38,24 +38,32 @@ async function editOneAddress(req, res){
     
     try{
         console.log(req.params.id, "<----- backend edit one address firing")
-        await Address.findById(req.params.id, async function (err, address){
-            // user = doc;
-            if(address){
-              for (const key in req.body) {
-                address[key] = req.body[key];
-            }
-            console.log(address, "address from edit");
-            // user = {...req.body, _id: req.params.id}
-            await address.save();
-            console.log(address, "address updated");
+        const updatedAddress = await Address.findByIdAndUpdate(req.params.id, {verified: req.body.verified}, {new: true});
+        // await Address.findById(req.params.id, async function (err, address){
+        //     console.log(req.body, "req.body <---------")
+        //     // user = doc;
+        //     if(address){
+        //     //   for (const key in req.body) {
+        //     //     if(address[key]){
+        //     //         address[key] = req.body[key];
+        //     //     }  
+                
+        //     // }
+        //     address.verified = req.body.verified;
+        //     console.log(address, "address from edit");
+        //     // user = {...req.body, _id: req.params.id}
+        //     await address.save();
+        //     console.log(address, "address updated");
             
-          }
-          });
+        //   }
+        //   });
         
 
-        console.log(address.house, "address from editBE <------")
-        res.status(200).json({address});
+        console.log(updatedAddress.house, "updatedAddress from editBE <------")
+        res.status(200).json({updatedAddress});
     } catch(err){
-        return res.status(401).json(err)
+        console.log("There was a controller error")
+        res.send(err)
+        // return res.status(401).json(err)
     }
 }
