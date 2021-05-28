@@ -13,5 +13,6 @@ const addressCtrl = require('../../controllers/addressControllers');
 
 router.get('/', addressCtrl.getAllAddresses);
 router.get('/:id', addressCtrl.getOneAddress);
+router.put('/:id', addressCtrl.editOneAddress);
 
 module.exports = router

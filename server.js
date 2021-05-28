@@ -4,6 +4,7 @@ const app        = express();
 const bodyParser = require('body-parser');
 const cors       = require('cors');
 const session    = require('express-session');
+var methodOverride = require('method-override');
 
 require('./db/db');
 
@@ -26,6 +27,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use('/public', express.static('public'));
+
+//Method Override
+app.use(methodOverride('_method'));
 
 // JWT authentication
 app.use(require('./config/auth'));
