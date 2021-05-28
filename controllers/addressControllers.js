@@ -8,7 +8,7 @@ module.exports = {
   getOneAddress,
   editOneAddress
 }
-//posts = await PlantPost.find({}).sort({'_id': -1}).populate('user').populate('plant').exec() // userSchema.set('toObject') gets invoked, to delete the password
+
 async function getAllAddresses(req, res){
     try{
         const allAddresses = await Address.find({}).sort({'_id': -1}).populate('user').populate('attic').populate('house')
@@ -34,6 +34,7 @@ async function getOneAddress(req, res){
     }
 }
 
+// currently only set up for verified
 async function editOneAddress(req, res){
     
     try{
