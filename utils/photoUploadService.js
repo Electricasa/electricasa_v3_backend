@@ -25,8 +25,6 @@ function checkComplete(addressDoc){
   return true;
 }
 
-
-
 function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
     
     console.log(req.file, "req.file<------")
@@ -57,6 +55,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
       try {
         newModelDocument.save();
         addressDocument.save();
+        res.json({ status: 200 });
       } catch (err) {
         // House not created successfully.
         res.status(500).json(err);
