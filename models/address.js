@@ -10,6 +10,7 @@ const addressSchema = mongoose.Schema({
     waHeater: { type: mongoose.Schema.Types.ObjectId, ref: 'WaHeater'},
     completed: {type: Boolean},
     verified: {type: Boolean},
+    notes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'AdminNote'}],
     buildingEfficiencyRating: {type: String},
     electrificationRating: {type: String},
 }, {
