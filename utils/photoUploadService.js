@@ -64,6 +64,73 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
   
   };
 
+
+  function uploadPhotoEditFormInfo(req, res, ModelObject, photoName) {
+    
+    console.log(req.file, "req.file<------")
+    const filePath = `${uuidv4()}/${req.file.originalname}`
+    const params = {Bucket: 'myelectricasa', Key: filePath, Body: req.file.buffer};
+   
+    s3.upload(params, async function(err, data){
+
+      // get our mycasa document and the document for the address as a whole
+      // const newModelDocument = await ModelObject.create({...req.body});
+      const addressDocument = await Address.findOne({user: req.body.userId});
+
+      const modelDocumentToEdit = await ModelObject.findOne({userId: req.params.id});
+
+
+      // await User.findById(req.params.id, async function (err, user){
+      //   // user = doc;
+      //   if(user){
+      //     for (const key in req.body) {
+      //       user[key] = req.body[key];
+      //   }
+      //   console.log(user, "user from edit");
+      //   // user = {...req.body, _id: req.params.id}
+      //   await user.save();
+      //   console.log(user, "user updated");
+        
+      // }
+      // });
+
+      if(modelDocumentToEdit){
+        for (const key in req.body) {
+          modelDocumentToEdit[key] = req.body[key];
+      }
+    }
+
+      // const updatedHouse = await House.findByIdAndUpdate(foundHouse._id, example, {new: true});
+
+      // model field is the same as the Image field minus "Img"
+      const modelField = photoName.slice(0, (photoName.length - 3));
+      // addressDocument[modelField] = newModelDocument._id;
+
+      // check if address document is complete or not, update address doc's complete field
+      addressDocument.completed = checkComplete(addressDocument);
+
+      addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
+
+      // test updated documents
+      console.log(modelDocumentToEdit, "database record being saved to db in S3 function")
+      console.log(addressDocument, "Address doc from S3 function <--------")
+
+      // data.Location is our photoUrl that exists on aws
+      modelDocumentToEdit[photoName] = data.Location;
+      try {
+        modelDocumentToEdit.save();
+        addressDocument.save();
+        res.json({ status: 200 });
+      } catch (err) {
+        // House not created successfully.
+        res.status(500).json(err);
+      }
+    })
+  
+  };
+
+
   module.exports = {
-      uploadPhotoSaveFormInfo
+      uploadPhotoSaveFormInfo,
+      uploadPhotoEditFormInfo
   }
