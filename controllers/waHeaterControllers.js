@@ -102,22 +102,27 @@ function makeWaHeaterFromBody(body, filename){
   }
 }
 
-router.put('/:id', (req, res) => {
-  upload(req, res, async(err) =>{
-    if(err){
-      console.log(err)
-    } else {
-      const example = makeWaHeaterFromBody(req.body, req.file.filename);
-      const foundWaHeater = await WaHeater.findOne({userId: req.params.id});
-      const updatedWaHeater = await WaHeater.findByIdAndUpdate(foundWaHeater._id, example, {new: true});
-
-      res.json({
-        status: 200,
-        data: updatedWaHeater
-      });
-    };
-  });
+router.put('/:id', upload.single('waHeaterImg'), (req, res) => {
+  
+  photoUtil.uploadPhotoEditFormInfo(req, res, WaHeater, 'waHeaterImg')
 });
+
+// router.put('/:id', (req, res) => {
+//   upload(req, res, async(err) =>{
+//     if(err){
+//       console.log(err)
+//     } else {
+//       const example = makeWaHeaterFromBody(req.body, req.file.filename);
+//       const foundWaHeater = await WaHeater.findOne({userId: req.params.id});
+//       const updatedWaHeater = await WaHeater.findByIdAndUpdate(foundWaHeater._id, example, {new: true});
+
+//       res.json({
+//         status: 200,
+//         data: updatedWaHeater
+//       });
+//     };
+//   });
+// });
 
 router.delete('/:id', async(req, res) => {
   try{

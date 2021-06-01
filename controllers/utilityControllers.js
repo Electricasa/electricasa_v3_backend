@@ -99,21 +99,26 @@ function makeUtilityFromBody(body, filename){
   }
 }
 
-router.put('/:id', (req, res) => {
-  upload(req, res, async(err) =>{
-    if(err){
-    }else{
-      const example = makeUtilityFromBody(req.body, req.file.filename);
-      const foundUtility = await Utility.findOne({userId: req.params.id});
-      const updatedUtility = await Utility.findByIdAndUpdate(foundUtility._id, example, {new: true});
-
-      res.json({
-        status: 200,
-        data: updatedUtility
-          })
-    }
-  })
+router.put('/:id', upload.single('utilityImg'), (req, res) => {
+  
+  photoUtil.uploadPhotoEditFormInfo(req, res, Utility, 'utilityImg')
 });
+
+// router.put('/:id', (req, res) => {
+//   upload(req, res, async(err) =>{
+//     if(err){
+//     }else{
+//       const example = makeUtilityFromBody(req.body, req.file.filename);
+//       const foundUtility = await Utility.findOne({userId: req.params.id});
+//       const updatedUtility = await Utility.findByIdAndUpdate(foundUtility._id, example, {new: true});
+
+//       res.json({
+//         status: 200,
+//         data: updatedUtility
+//           })
+//     }
+//   })
+// });
 
 router.delete('/:id', async(req, res) => {
   try{

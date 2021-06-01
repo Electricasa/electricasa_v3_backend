@@ -94,6 +94,12 @@ function makeSpHeaterFromBody(body, filename){
   };
 };
 
+router.put('/:id', upload.single('spHeaterImg'), (req, res) => {
+  
+  photoUtil.uploadPhotoEditFormInfo(req, res, SpHeater, 'spHeaterImg')
+});
+
+
 router.put('/:id', (req, res) => {
   upload(req, res, async(err) =>{
     if(err){

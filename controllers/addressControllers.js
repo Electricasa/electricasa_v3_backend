@@ -10,7 +10,12 @@ module.exports = {
 }
 
 async function getAllAddresses(req, res){
+    console.log(req.user, "req.user from getAllAddresses <-------++-----")
+    
     try{
+        if(!req.user.isAdmin){
+            throw err;
+        }
         const allAddresses = await Address.find({}).sort({'_id': -1}).populate('user').populate('attic').populate('house')
                     .populate('roof').populate('spHeater').populate('utility')
                     .populate('waHeater').exec();

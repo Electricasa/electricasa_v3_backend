@@ -97,26 +97,32 @@ function makeAtticFromBody(body, filename){
   }
 };
 
-router.put('/:id', (req, res) => {
-  upload(req, res, async(err) =>{
-    if (err) {
-      console.log('its err', err);
-    } else {
-      const example = makeAtticFromBody(req.body, req.file.filename);
-      const foundAttic = await Attic.findOne({userId: req.params.id});
-      const updatedAttic = await Attic.findByIdAndUpdate(foundAttic._id, example, {new: true});
-
-      res.json({
-        status: 200,
-        data: updatedAttic
-      });
-    };
-  });
+router.put('/:id', upload.single('atticImg'), (req, res) => {
+  photoUtil.uploadPhotoEditFormInfo(req, res, Attic, 'atticImg')
 });
+
+// router.put('/:id', (req, res) => {
+//   upload(req, res, async(err) =>{
+//     if (err) {
+//       console.log('its err', err);
+//     } else {
+//       const example = makeAtticFromBody(req.body, req.file.filename);
+//       const foundAttic = await Attic.findOne({userId: req.params.id});
+//       const updatedAttic = await Attic.findByIdAndUpdate(foundAttic._id, example, {new: true});
+
+//       res.json({
+//         status: 200,
+//         data: updatedAttic
+//       });
+//     };
+//   });
+// });
 
 router.delete('/:id', async(req, res) => {
   try {
+    console.log(req.params.id, "attic delete firing");
     const foundAttic = await Attic.findOne({userId: req.params.id});
+    console.log(foundAttic, "found Attic from delete");
     const deletedAttic = await Attic.findByIdAndRemove(foundAttic._id);
 
     res.json({

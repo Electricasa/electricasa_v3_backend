@@ -92,22 +92,27 @@ function makeRoofFromBody(body, filename){
   };
 };
 
-router.put('/:id', (req, res) => {
-  upload(req, res, async(err) =>{
-    if (err){
-      console.log('its err', err);
-    } else {
-      const example = makeRoofFromBody(req.body, req.file.filename);
-      const foundRoof = await Roof.findOne({userId: req.params.id});
-      const updatedRoof = await Roof.findByIdAndUpdate(foundRoof._id, example, {new: true});
-
-      res.json ({
-        status: 200,
-        data: updatedRoof
-      });
-    };
-  });
+router.put('/:id', upload.single('roofImg'), (req, res) => {
+  
+  photoUtil.uploadPhotoEditFormInfo(req, res, Roof, 'roofImg')
 });
+
+// router.put('/:id', (req, res) => {
+//   upload(req, res, async(err) =>{
+//     if (err){
+//       console.log('its err', err);
+//     } else {
+//       const example = makeRoofFromBody(req.body, req.file.filename);
+//       const foundRoof = await Roof.findOne({userId: req.params.id});
+//       const updatedRoof = await Roof.findByIdAndUpdate(foundRoof._id, example, {new: true});
+
+//       res.json ({
+//         status: 200,
+//         data: updatedRoof
+//       });
+//     };
+//   });
+// });
 
 router.delete('/:id', async(req, res) => {
   try {

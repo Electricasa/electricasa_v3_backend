@@ -115,7 +115,7 @@ router.post('/', upload.single('houseImg'), (req, res) => {
 
 function makeHouseFromBody(body, filename) {
   return {
-      houseImg: `public/uploads/${filename}`,
+      houseImg: body.houseImg,
       address: body.address,
       city: body.city,
       state: body.state,
@@ -126,22 +126,28 @@ function makeHouseFromBody(body, filename) {
   }
 };
 
-router.put('/:id', (req, res) => {
-  upload(req, res, async(err) =>{
-    if (err) {
-      console.log('its err', err);
-    } else {
-      const example = makeHouseFromBody(req.body, req.file.filename);
-      const foundHouse = await House.findOne({userId: req.params.id});
-      const updatedHouse = await House.findByIdAndUpdate(foundHouse._id, example, {new: true});
-
-      res.json({
-        status: 200,
-        data: updatedHouse
-      });
-    };
-  });
+router.put('/:id', upload.single('houseImg'), (req, res) => {
+  photoUtil.uploadPhotoEditFormInfo(req, res, House, 'houseImg')
 });
+
+// router.put('/:id', (req, res) => {
+//   upload(req, res, async(err) =>{
+//     if (err) {
+//       console.log('its err', err);
+//     } else {
+//       console.log("firing in edit BE<-----")
+
+//       const example = makeHouseFromBody(req.body, req.file.filename);
+//       const foundHouse = await House.findOne({userId: req.params.id});
+//       const updatedHouse = await House.findByIdAndUpdate(foundHouse._id, example, {new: true});
+
+//       res.json({
+//         status: 200,
+//         data: updatedHouse
+//       });
+//     };
+//   });
+// });
 
 router.delete('/:id', async(req, res) => {
   try {
