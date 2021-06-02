@@ -101,6 +101,11 @@ router.put('/:id', upload.single('atticImg'), (req, res) => {
   photoUtil.uploadPhotoEditFormInfo(req, res, Attic, 'atticImg')
 });
 
+router.put('/:id/noPhoto', (req, res) => {
+  
+  photoUtil.noPhotoEditFormInfo(req, res, Attic)
+});
+
 // router.put('/:id', (req, res) => {
 //   upload(req, res, async(err) =>{
 //     if (err) {
