@@ -99,23 +99,27 @@ router.put('/:id', upload.single('spHeaterImg'), (req, res) => {
   photoUtil.uploadPhotoEditFormInfo(req, res, SpHeater, 'spHeaterImg')
 });
 
-
-router.put('/:id', (req, res) => {
-  upload(req, res, async(err) =>{
-    if(err){
-      console.log('its err', err);
-    }else{
-      const example = makeSpHeaterFromBody(req.body, req.file.filename);
-      const foundSpHeater = await SpHeater.findOne({userId: req.params.id});
-      const updatedSpHeater = await SpHeater.findByIdAndUpdate(foundSpHeater._id, example, {new: true});
-
-      res.json({
-        status: 200,
-        data: updatedSpHeater
-      });
-    };
-  });
+router.put('/:id/noPhoto', (req, res) => {
+  
+  photoUtil.noPhotoEditFormInfo(req, res, SpHeater)
 });
+
+// router.put('/:id', (req, res) => {
+//   upload(req, res, async(err) =>{
+//     if(err){
+//       console.log('its err', err);
+//     }else{
+//       const example = makeSpHeaterFromBody(req.body, req.file.filename);
+//       const foundSpHeater = await SpHeater.findOne({userId: req.params.id});
+//       const updatedSpHeater = await SpHeater.findByIdAndUpdate(foundSpHeater._id, example, {new: true});
+
+//       res.json({
+//         status: 200,
+//         data: updatedSpHeater
+//       });
+//     };
+//   });
+// });
 
 router.delete('/:id', async(req, res) => {
   try{

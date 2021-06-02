@@ -107,6 +107,11 @@ router.put('/:id', upload.single('waHeaterImg'), (req, res) => {
   photoUtil.uploadPhotoEditFormInfo(req, res, WaHeater, 'waHeaterImg')
 });
 
+router.put('/:id/noPhoto', (req, res) => {
+  
+  photoUtil.noPhotoEditFormInfo(req, res, WaHeater)
+});
+
 // router.put('/:id', (req, res) => {
 //   upload(req, res, async(err) =>{
 //     if(err){
