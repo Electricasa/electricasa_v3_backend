@@ -104,6 +104,11 @@ router.put('/:id', upload.single('utilityImg'), (req, res) => {
   photoUtil.uploadPhotoEditFormInfo(req, res, Utility, 'utilityImg')
 });
 
+router.put('/:id/noPhoto', (req, res) => {
+  
+  photoUtil.noPhotoEditFormInfo(req, res, Utility)
+});
+
 // router.put('/:id', (req, res) => {
 //   upload(req, res, async(err) =>{
 //     if(err){
