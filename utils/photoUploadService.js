@@ -15,7 +15,7 @@ const addressFields = ["attic", "house", "roof", "spHeater", "waHeater"]
 // checks if address document has necessary fields entered to be "complete"
 function checkComplete(addressDoc){
   for (let idx in addressFields){
-    // console.log(addressDoc, "addressDoc from checkComplete");
+    console.log(addressDoc, "addressDoc from checkComplete");
     // console.log(idx, "idx from checkComplete");
     // console.log(addressDoc[addressFields[idx]], "m--------W Keys of addressDoc")
     if(!addressDoc[addressFields[idx]]){
@@ -130,7 +130,8 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
   };
 
 
-  function noPhotoEditFormInfo(req, res, ModelObject){
+  async function noPhotoEditFormInfo(req, res, ModelObject){
+    console.log(req.body, "req.body <----- editNoPhoto")
     const addressDocument = await Address.findOne({user: req.body.userId});
 
       const modelDocumentToEdit = await ModelObject.findOne({userId: req.params.id});
@@ -150,8 +151,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
     console.log(modelDocumentToEdit, "database record being saved to db in No Photo Edit function")
     console.log(addressDocument, "Address doc from No Photo Edit function <--------")
 
-    // data.Location is our photoUrl that exists on aws
-    modelDocumentToEdit[photoName] = data.Location;
+  
     try {
       modelDocumentToEdit.save();
       addressDocument.save();
