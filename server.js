@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://localhost:3000', 'https://electricasa-frontend.herokuapp.com', 'http://electricasa-frontend.herokuapp.com', 'https://myelectricasa.netlify.app', 'http://myelectricasa.netlify.app'],
+  origin: ['http://localhost:3000', 'https://localhost:3000', 'https://electricasa-frontend.herokuapp.com', 'http://electricasa-frontend.herokuapp.com', 'https://myelectricasa.netlify.app', 'http://myelectricasa.netlify.app', 'http://myelectricasa.com', 'https://myelectricasa.com'],
   credentials: true,
   optionsSuccessStatus:200
 }
