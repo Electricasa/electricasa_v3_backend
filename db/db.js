@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
-const connectionString = 'mongodb://localhost/electricasa';
-const MONGODB_URL = `mongodb+srv://seheesf88:casa-north@cluster0.4c1d1.mongodb.net/electricasa-v3?retryWrites=true&w=majority`
+// const connectionString = 'mongodb://localhost/electricasa';
+// const MONGODB_URL = `mongodb+srv://seheesf88:casa-north@cluster0.4c1d1.mongodb.net/electricasa-v3?retryWrites=true&w=majority`
+const connectionString = process.env.CONNECTIONSTRING;
+const MONGODB_URL = process.env.MONGODB_URL;
 
 mongoose.connect( MONGODB_URL || process.env.MONGODB_URI || connectionString, {
   useNewUrlParser: true,
