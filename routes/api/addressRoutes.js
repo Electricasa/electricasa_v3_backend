@@ -12,6 +12,7 @@ const addressCtrl = require('../../controllers/addressControllers');
 /*---------- Protected Routes ----------*/
 
 router.get('/', addressCtrl.getAllAddresses);
+router.get('/userAddress/:id', addressCtrl.getAddressFromUser);
 router.get('/:id', addressCtrl.getOneAddress);
 router.put('/:id', addressCtrl.editOneAddress);
 

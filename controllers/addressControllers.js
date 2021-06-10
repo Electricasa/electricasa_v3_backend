@@ -6,7 +6,8 @@ const Address = require('../models/address');
 module.exports = {
   getAllAddresses,
   getOneAddress,
-  editOneAddress
+  editOneAddress,
+  getAddressFromUser
 }
 
 async function getAllAddresses(req, res){
@@ -33,6 +34,19 @@ async function getOneAddress(req, res){
             .populate('roof').populate('spHeater').populate('utility')
             .populate('waHeater').exec();
         console.log(address.house, "address from getOne BE <------")
+        res.status(200).json({address});
+    } catch(err){
+        return res.status(401).json(err)
+    }
+}
+
+async function getAddressFromUser(req, res){
+    console.log(req.params.id, "req.params from useraddress <-----")
+    try{
+        const address = await Address.findOne({user: req.params.id}).populate('user').populate('attic').populate('house')
+            .populate('roof').populate('spHeater').populate('utility')
+            .populate('waHeater').exec();
+        console.log(address, "address from USERGetOne BE <------")
         res.status(200).json({address});
     } catch(err){
         return res.status(401).json(err)
