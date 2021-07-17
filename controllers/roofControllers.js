@@ -92,15 +92,17 @@ function makeRoofFromBody(body, filename){
   };
 };
 
+router.put('/noPhoto/:id', (req, res) => {
+  
+  photoUtil.noPhotoEditFormInfo(req, res, Roof)
+});
+
 router.put('/:id', upload.single('roofImg'), (req, res) => {
 
   photoUtil.uploadPhotoEditFormInfo(req, res, Roof, 'roofImg')
 });
 
-router.put('/:id/noPhoto', (req, res) => {
-  
-  photoUtil.noPhotoEditFormInfo(req, res, Roof)
-});
+
 
 // router.put('/:id', (req, res) => {
 //   upload(req, res, async(err) =>{

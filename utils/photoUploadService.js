@@ -70,7 +70,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
 
     if(!req.file){
 
-     noPhotoEditFormInfo(req, res, ModelObject);
+     return res.status(500).json(err);
 
     } else{
 

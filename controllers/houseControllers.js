@@ -126,14 +126,16 @@ function makeHouseFromBody(body, filename) {
   }
 };
 
+router.put('/noPhoto/:id', (req, res) => {
+  
+  photoUtil.noPhotoEditFormInfo(req, res, House)
+});
+
 router.put('/:id', upload.single('houseImg'), (req, res) => {
   photoUtil.uploadPhotoEditFormInfo(req, res, House, 'houseImg')
 });
 
-router.put('/:id/noPhoto', (req, res) => {
-  
-  photoUtil.noPhotoEditFormInfo(req, res, House)
-});
+
 
 // router.put('/:id', (req, res) => {
 //   upload(req, res, async(err) =>{
