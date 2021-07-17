@@ -42,6 +42,7 @@ const atticControllers = require('./controllers/atticControllers');
 const spHeaterControllers = require('./controllers/spHeaterControllers');
 const waHeaterControllers = require('./controllers/waHeaterControllers');
 const utilityControllers = require('./controllers/utilityControllers');
+const noPhotoControllers = require('./controllers/noPhotoControllers');
 
 app.use('/api/v1/auth', require('./routes/api/authRoutes'));
 app.use('/api/v1/address', require('./routes/api/addressRoutes'));
@@ -52,6 +53,7 @@ app.use('/api/v1/roof', roofControllers);
 app.use('/api/v1/spHeater', spHeaterControllers);
 app.use('/api/v1/waHeater', waHeaterControllers);
 app.use('/api/v1/utility', utilityControllers);
+app.use('/api/v1/nophoto', noPhotoControllers);
 
 app.listen(process.env.PORT || 9000, () => {
   console.log('I am working...')
