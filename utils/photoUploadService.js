@@ -150,19 +150,30 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
       const modelDocumentToEdit = await ModelObject.findOne({userId: req.params.id});
 
 
+
       if(modelDocumentToEdit){
         for (const key in req.body) {
           modelDocumentToEdit[key] = req.body[key];
       }
+    } else {
+      console.log('No Model Object');
     }
+    if(!addressDocument){
+      console.log('No address doc......');
+    } else {
 
-    addressDocument.completed = checkComplete(addressDocument);
+      addressDocument.completed = checkComplete(addressDocument);
 
-    addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
+      addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
 
-    // test updated documents
+      // test updated documents
     console.log(modelDocumentToEdit, "database record being saved to db in No Photo Edit function")
     console.log(addressDocument, "Address doc from No Photo Edit function <--------")
+
+    }
+    
+
+    
 
   
     try {
