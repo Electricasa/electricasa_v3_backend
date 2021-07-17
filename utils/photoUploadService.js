@@ -66,8 +66,15 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
 
 
   function uploadPhotoEditFormInfo(req, res, ModelObject, photoName) {
-    
-    console.log(req.file, "req.file<------")
+
+
+    if(!req.file){
+
+     noPhotoEditFormInfo(req, res, ModelObject);
+
+    } else{
+
+      console.log(req.file, "req.file<------")
     const filePath = `${uuidv4()}/${req.file.originalname}`
     const params = {Bucket: 'myelectricasa', Key: filePath, Body: req.file.buffer};
    
@@ -126,6 +133,11 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
         res.status(500).json(err);
       }
     })
+
+    }
+
+    
+    
   
   };
 
