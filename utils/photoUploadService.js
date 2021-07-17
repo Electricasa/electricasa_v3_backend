@@ -68,37 +68,9 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
   function uploadPhotoEditFormInfo(req, res, ModelObject, photoName) {
 
 
-    if(!photoName){
+    if(!req.file){
 
-      console.log(req.body, "req.body <----- editNoPhoto")
-    const addressDocument = await Address.findOne({user: req.body.userId});
-
-      const modelDocumentToEdit = await ModelObject.findOne({userId: req.params.id});
-
-
-      if(modelDocumentToEdit){
-        for (const key in req.body) {
-          modelDocumentToEdit[key] = req.body[key];
-      }
-    }
-
-    addressDocument.completed = checkComplete(addressDocument);
-
-    addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
-
-    // test updated documents
-    console.log(modelDocumentToEdit, "database record being saved to db in No Photo Edit function")
-    console.log(addressDocument, "Address doc from No Photo Edit function <--------")
-
-  
-    try {
-      modelDocumentToEdit.save();
-      addressDocument.save();
-      res.json({ status: 200 });
-    } catch (err) {
-      // House not created successfully.
-      res.status(500).json(err);
-    }
+     noPhotoEditFormInfo(req, res, ModelObject);
 
     } else{
 
