@@ -145,7 +145,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
 
   async function noPhotoEditFormInfo(req, res, ModelObject){
     console.log(req.body, "req.body <----- editNoPhoto")
-    const addressDocument = await Address.findOne({user: req.body.userId});
+    const addressDocument = await Address.findOne({user: req.params.id});
 
       const modelDocumentToEdit = await ModelObject.findOne({userId: req.params.id});
 
