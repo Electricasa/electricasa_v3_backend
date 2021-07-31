@@ -19,6 +19,15 @@ const storage = multer.diskStorage({
 const upload = multer({
   // storage: storage,
   limits: {fileSize: 100000000},
+  fileFilter: (req, file, cb) => {
+    console.log(file.mimetype, "blob mimetype <-----");
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+  }
   // fileFilter: function (req, file, cb) {
   //   checkFileType(file, cb)
   // }
