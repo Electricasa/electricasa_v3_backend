@@ -19,9 +19,9 @@ const storage = multer.diskStorage({
 const upload = multer({
   // storage: storage,
   limits: {fileSize: 100000000},
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb)
-  }
+  // fileFilter: function (req, file, cb) {
+  //   checkFileType(file, cb)
+  // }
 });
 
 function checkFileType(file, cb) {
@@ -32,7 +32,8 @@ function checkFileType(file, cb) {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb('Error: Images only!');
+    cb('Error: Images only!' + file);
+    
   };
 };
 

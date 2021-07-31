@@ -8,11 +8,11 @@ var methodOverride = require('method-override');
 
 require('./db/db');
 
-app.use(session({
-  secret: 'nyamissi',
-  resave: false,
-  saveUninitialized: false
-}));
+// app.use(session({
+//   secret: 'nyamissi',
+//   resave: false,
+//   saveUninitialized: false
+// }));
 
 
 app.use(bodyParser.urlencoded({extended:false}));
