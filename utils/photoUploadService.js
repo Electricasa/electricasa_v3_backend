@@ -1,30 +1,27 @@
 const multer = require('multer');
 const path = require('path');
 const Address  = require('../models/address');
-
+const addressUtil = require ('./addressService');
 //creates a uniform id for S3 storage
 const { v4: uuidv4 } = require('uuid');
 
 const S3 = require('aws-sdk/clients/s3');
 const s3 = new S3(); // initialize the construcotr
 
-// current fields necessary for an address entry to be considered complete 
-// utility is optional
-const addressFields = ["attic", "house", "roof", "spHeater", "waHeater"]
-
-// checks if address document has necessary fields entered to be "complete"
-function checkComplete(addressDoc){
-  for (let idx in addressFields){
-    
-    // console.log(idx, "idx from checkComplete");
-    // console.log(addressDoc[addressFields[idx]], "m--------W Keys of addressDoc")
-    if(!addressDoc[addressFields[idx]]){
-      return false;
+const multerUpload = multer({
+  // storage: storage,
+  limits: {fileSize: 100000000},
+  fileFilter: (req, file, cb) => {
+    console.log(file.mimetype, "blob mimetype <-----");
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
     }
-    console.log(addressDoc, "addressDoc from checkComplete");
   }
-  return true;
-}
+});
+
 
 function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
     
@@ -43,7 +40,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
       addressDocument[modelField] = newModelDocument._id;
 
       // check if address document is complete or not, update address doc's complete field
-      addressDocument.completed = checkComplete(addressDocument);
+      addressDocument.completed = addressUtil.checkComplete(addressDocument);
 
       addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
 
@@ -87,21 +84,6 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
 
       const modelDocumentToEdit = await ModelObject.findOne({userId: req.params.id});
 
-
-      // await User.findById(req.params.id, async function (err, user){
-      //   // user = doc;
-      //   if(user){
-      //     for (const key in req.body) {
-      //       user[key] = req.body[key];
-      //   }
-      //   console.log(user, "user from edit");
-      //   // user = {...req.body, _id: req.params.id}
-      //   await user.save();
-      //   console.log(user, "user updated");
-        
-      // }
-      // });
-
       if(modelDocumentToEdit){
         for (const key in req.body) {
           modelDocumentToEdit[key] = req.body[key];
@@ -115,7 +97,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
       // addressDocument[modelField] = newModelDocument._id;
 
       // check if address document is complete or not, update address doc's complete field
-      addressDocument.completed = checkComplete(addressDocument);
+      addressDocument.completed = addressUtil.checkComplete(addressDocument);
 
       addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
 
@@ -136,16 +118,13 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
     })
 
     }
-
-    
-    
   
   };
 
 
   async function noPhotoEditFormInfo(req, res, ModelObject){
     console.log(req.body, "req.body <----- editNoPhoto")
-    const addressDocument = await Address.findOne({user: req.body.userId});
+    const addressDocument = await Address.findOne({user: req.params.id});
 
       const modelDocumentToEdit = await ModelObject.findOne({userId: req.params.id});
 
@@ -162,7 +141,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
       console.log('No address doc......');
     } else {
 
-      addressDocument.completed = checkComplete(addressDocument);
+      addressDocument.completed = addressUtil.checkComplete(addressDocument);
 
       addressDocument.verified = addressDocument.verified ? addressDocument.verified : false;
 
@@ -172,10 +151,6 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
 
     }
     
-
-    
-
-  
     try {
       modelDocumentToEdit.save();
       addressDocument.save();
@@ -188,6 +163,7 @@ function uploadPhotoSaveFormInfo(req, res, ModelObject, photoName) {
   }
 
   module.exports = {
+      multerUpload,
       uploadPhotoSaveFormInfo,
       uploadPhotoEditFormInfo,
       noPhotoEditFormInfo
