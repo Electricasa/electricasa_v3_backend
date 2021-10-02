@@ -8,6 +8,7 @@ const Roof        = require('../models/roof');
 const SpHeater    = require('../models/spHeater');
 const WaHeater    = require('../models/waHeater');
 const Utility     = require('../models/utility');
+const Address     = require('../models/address');
 
 //get my acc
 // router.get('/:id', async(req, res) => {
@@ -52,7 +53,9 @@ router.get('/:id', async(req, res) => {
 //delete my acc
 router.delete('/:id', async(req, res) => {
   try{
-    const deletedUser = await User.findByIdAndRemove(req.params.id);
+    const address = await Address.findOneAndDelete({user: req.params.id});
+    const deletedUser = await User.findOneAndDelete({_id: req.params.id});
+    console.log(address, "<----deleted address");
     res.json({
       status: 200,
       data: deletedUser
