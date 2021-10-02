@@ -4,11 +4,15 @@ const connectionString = process.env.CONNECTIONSTRING
 const MONGODB_URL = process.env.MONGODB_URL
 console.log(MONGODB_URL, connectionString, "DB Stuff")
 
-mongoose.connect( MONGODB_URL || process.env.MONGODB_URL || connectionString, {
+mongoose.connect( 
+  MONGODB_URL || process.env.MONGODB_URL || connectionString, 
+  {
   useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
+  
   useUnifiedTopology: true
+}, err => {
+  if(err) throw err;
+  console.log('mongo 6');
 });
 
 mongoose.connection.on('connected', () => {
