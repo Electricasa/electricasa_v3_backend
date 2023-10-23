@@ -2,7 +2,7 @@
   "name": "backend_v3",
   "version": "1.0.0",
   "engines": {
-    "node": "12.x"
+    "node": "18.x"
   },
   "description": "",
   "main": "server.js",
@@ -20,12 +20,12 @@
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mongodb": "^3.6.2",
     "mongoose": "^6.0.8",
-    "multer": "^1.4.2",
-    "nodemon": "^2.0.13",
-    "serve": "^11.3.2"
+    "multer": "1.4.4-lts.1",
+    "nodemon": "^3.0.1",
+    "serve": "^14.2.1"
   }
 }
